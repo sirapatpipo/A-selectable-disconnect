@@ -1,4 +1,7 @@
-# Internet Disconnector
+trust me this will work
+Be aware I use AI for this thing so if you found a bug and somehow you can fix it you can send me the app for update for other people
+
+Internet Disconnector
 
 Internet Disconnector is a Windows app that lets you block or unblock internet access for running `.exe` files by using Windows Firewall.
 
