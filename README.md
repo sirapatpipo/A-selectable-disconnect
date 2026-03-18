@@ -65,7 +65,7 @@ Simple example:
   "hotkey_unblock_selected": "CTRL+U",
   "hotkey_unblock_all": "CTRL+SHIFT+U",
   "hotkey_toggle_selected": "CTRL+VK_RETURN",
-  "about_github_url": "https://github.com/your-github-link-here",
+  "about_github_url": "base64:aHR0cHM6Ly9naXRodWIuY29tL3NpcmFwYXRwaXBvL0Etc2VsZWN0YWJsZS1kaXNjb25uZWN0",
   "window_geometry": "460x360",
   "settings_window_geometry": "520x620"
 }
@@ -83,6 +83,7 @@ Useful config keys:
 - `only_active_default`: start with only active network apps
 - `hotkeys_enabled`: turn hotkeys on or off
 - `window_geometry`: main window size like `460x360`
+- `about_github_url`: plain URL or `base64:...`
 
 ## Hotkeys
 

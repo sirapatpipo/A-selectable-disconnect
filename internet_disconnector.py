@@ -7,6 +7,7 @@ import sys
 import threading
 import tkinter as tk
 import webbrowser
+import base64
 
 from collections import OrderedDict
 from pathlib import Path
@@ -45,7 +46,7 @@ CONFIG_DEFAULTS = {
     "hotkey_unblock_selected": "CTRL+U",
     "hotkey_unblock_all": "CTRL+SHIFT+U",
     "hotkey_toggle_selected": "CTRL+VK_RETURN",
-    "about_github_url": "https://github.com/your-github-link-here",
+    "about_github_url": "base64:aHR0cHM6Ly9naXRodWIuY29tL3NpcmFwYXRwaXBvL0Etc2VsZWN0YWJsZS1kaXNjb25uZWN0",
     "window_geometry": "460x360",
     "settings_window_geometry": "520x620",
 }
@@ -784,6 +785,19 @@ def format_duration_label(seconds: int) -> str:
     return f"{seconds} second" if seconds == 1 else f"{seconds} seconds"
 
 
+def decode_config_url(value: str) -> str:
+    value = (value or "").strip()
+    if not value:
+        return ""
+    if not value.lower().startswith("base64:"):
+        return value
+    try:
+        encoded = value.split(":", 1)[1].strip()
+        return base64.b64decode(encoded).decode("utf-8").strip()
+    except Exception:
+        return ""
+
+
 class App(tk.Tk):
     def __init__(self, is_admin_user: bool, config: dict):
         super().__init__()
@@ -1076,7 +1090,12 @@ class App(tk.Tk):
         hotkeys_enabled_var = tk.BooleanVar(value=self.config_data.get("hotkeys_enabled", True))
         refresh_interval_var = tk.StringVar(value=str(self.config_data.get("refresh_interval", 5)))
         max_cached_icons_var = tk.StringVar(value=str(self.config_data.get("max_cached_icons", 192)))
-        about_github_url_var = tk.StringVar(value=self.config_data.get("about_github_url", "https://github.com/your-github-link-here"))
+        about_github_url_var = tk.StringVar(
+            value=self.config_data.get(
+                "about_github_url",
+                "base64:aHR0cHM6Ly9naXRodWIuY29tL3NpcmFwYXRwaXBvL0Etc2VsZWN0YWJsZS1kaXNjb25uZWN0",
+            )
+        )
         window_geometry_var = tk.StringVar(value=self.config_data.get("window_geometry", CONFIG_DEFAULTS["window_geometry"]))
         settings_geometry_var = tk.StringVar(
             value=self.config_data.get("settings_window_geometry", CONFIG_DEFAULTS["settings_window_geometry"])
@@ -1627,8 +1646,9 @@ class App(tk.Tk):
             self.inject_btn.config(text="Block All")
 
     def _open_about(self) -> None:
-        github_url = (self.config_data.get("about_github_url", "") or "").strip()
-        if github_url and github_url != "https://github.com/your-github-link-here":
+        raw_github_url = (self.config_data.get("about_github_url", "") or "").strip()
+        github_url = decode_config_url(raw_github_url)
+        if github_url:
             try:
                 webbrowser.open(github_url)
                 self._show_info_message("About", f"Opening:\n{github_url}")
@@ -1639,7 +1659,8 @@ class App(tk.Tk):
         self._show_info_message(
             "About",
             "Add your GitHub link in Settings or in internet_disconnector.config.json.\n\n"
-            "Field: about_github_url",
+            "Field: about_github_url\n"
+            "You can store a plain URL or use base64:...",
         )
 
     def refresh_app_list(self) -> None:

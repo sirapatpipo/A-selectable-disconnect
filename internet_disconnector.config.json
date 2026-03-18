@@ -22,7 +22,7 @@
   "hotkey_unblock_selected": "CTRL+U",
   "hotkey_unblock_all": "CTRL+SHIFT+U",
   "hotkey_toggle_selected": "CTRL+VK_RETURN",
-  "about_github_url": "https://github.com/your-github-link-here",
+  "about_github_url": "base64:aHR0cHM6Ly9naXRodWIuY29tL3NpcmFwYXRwaXBvL0Etc2VsZWN0YWJsZS1kaXNjb25uZWN0",
   "window_geometry": "453x373",
   "settings_window_geometry": "520x620"
 }
